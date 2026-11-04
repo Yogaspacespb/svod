@@ -102,7 +102,7 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 <header class="hd">
   <div class="hd-logo">
     <svg viewBox="0 0 30 30" fill="none"><ellipse cx="15" cy="15" rx="9.5" ry="9.5" stroke="#fdf6f0" stroke-width="1.1"/><ellipse cx="15" cy="15" rx="13.5" ry="5.5" stroke="#fdf6f0" stroke-width="1.1" transform="rotate(-24 15 15)"/></svg>
-    <div><div class="hd-name">Yoga Space · Чернышевская</div><div class="hd-sub">обновлено 8 окт 2026</div></div>
+    <div><div class="hd-name">Yoga Space · Чернышевская</div><div class="hd-sub">обновлено 4 ноя 2026</div></div>
   </div>
   <div class="hd-badge" id="hd-badge">2026</div>
 </header>
@@ -115,7 +115,9 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
   <button class="mbtn" onclick="showMonth('jul',this)">Июль</button>
   <button class="mbtn" onclick="showMonth('aug',this)">Август</button>
   <button class="mbtn" onclick="showMonth('sep',this)">Сентябрь</button>
-  <button class="mbtn empty" onclick="showMonth('oct',this)">Октябрь</button>
+  <button class="mbtn" onclick="showMonth('oct',this)">Октябрь</button>
+  <button class="mbtn empty" onclick="showMonth('nov',this)">Ноябрь</button>
+  <button class="mbtn empty" onclick="showMonth('dec',this)">Декабрь</button>
 </nav>
 
 <!-- [FIX 9] Объединили "Продажи" и "По категориям" → "Продажи" -->
@@ -1086,8 +1088,8 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
   <div class="cards">
     <div class="card blue"><div class="card-lbl">Всего посещений</div><div class="card-val blue" id="ov-total">—</div><div class="card-sub">итого за октябрь</div></div>
     <div class="card blue"><div class="card-lbl">Первых за октябрь</div><div class="card-val blue" id="ov-first-month">—</div><div class="card-sub">пробные + приведи друга</div></div>
-    <div class="card purple"><div class="card-lbl">Продано First</div><div class="card-val purple" id="ov-first-sold">—</div><div class="card-sub">всего за октябрь</div></div>
-    <div class="card"><div class="card-lbl">Конверсия First</div><div class="card-val" id="ov-conv">—</div><div class="card-sub">от первых посещений</div></div>
+    <div class="card purple"><div class="card-lbl">Продано First</div><div class="card-val purple" id="ov-first-sold">121</div><div class="card-sub">всего за октябрь</div></div>
+    <div class="card"><div class="card-lbl">Конверсия First</div><div class="card-val" id="ov-conv">33%</div><div class="card-sub">от первых посещений</div></div>
   </div>
   <div class="panel" id="visitsPanelOct">
     <h3>Посещения — детализация</h3>
@@ -1174,6 +1176,302 @@ td.r{text-align:right;font-variant-numeric:tabular-nums}
 
 </div><!-- /month-oct -->
 
+<div class="mpane" id="month-nov">
+
+<!-- ОКТЯБРЬ · Продажи (объединены) -->
+<div class="sec active" id="nov-sec-sales">
+  <p class="eyebrow">Продажи · ноябрь 2026</p>
+  <div class="cards">
+    <div class="card"><div class="card-lbl">Итого за период</div><div class="card-val" id="ns-total">—</div><div class="card-sub">услуги + товары</div></div>
+    <div class="card"><div class="card-lbl">Услуги</div><div class="card-val" id="ns-abon">—</div><div class="card-sub">абонементы студии</div></div>
+    <div class="card orange"><div class="card-lbl">Товары</div><div class="card-val orange" id="ns-tovar">—</div><div class="card-sub">розничные продажи</div></div>
+    <div class="card purple"><div class="card-lbl">План на месяц</div><div class="card-val purple" id="ns-plan">—</div><div class="card-sub">нет данных</div></div>
+  </div>
+  <div class="panel">
+    <h3>Продажи по неделям</h3><div class="panel-sub">услуги и товары · ноябрь 2026</div>
+    <div class="chart-h"><canvas id="chartNovWeekly"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Услуги</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Товары</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--pu);height:3px;border-radius:0;border-top:2px dashed var(--pu)"></div>План</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Детализация по неделям</h3><div class="panel-sub"></div>
+    <div class="twrap"><table>
+      <thead><tr><th>Неделя</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Корп. FITMOST</th><th class="r">Итого</th><th class="r">% плана нед.</th><th class="r">Накоплено</th><th class="r">Посещения</th></tr></thead>
+      <tbody id="nWeekTable"></tbody>
+    </table></div>
+  </div>
+  <div class="chart-row">
+    <div class="panel" style="margin-bottom:0">
+      <h3>Услуги по времени</h3><div class="panel-sub">утро · вечер · выходные · тыс ₽</div>
+      <div class="chart-h sm"><canvas id="chartNovAbonCats"></canvas></div>
+      <div class="legend" style="margin-top:8px">
+        <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Выходные</div>
+        <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер</div>
+        <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро</div>
+      </div>
+    </div>
+    <div class="panel" style="margin-bottom:0">
+      <h3>Товары по времени</h3><div class="panel-sub">утро · вечер · выходные · тыс ₽</div>
+      <div class="chart-h sm"><canvas id="chartNovTovarCats"></canvas></div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Детализация по категориям</h3><div class="panel-sub">услуги (детальный отчёт 1С) + Фитмост + товары · Летний безлимит выделен отдельно</div>
+    <div class="twrap"><table id="nCatsTable">
+      <thead><tr>
+        <th>Категория</th>
+        <th class="r" style="background:#4a5429">Итого ноябрь</th>
+      </tr></thead>
+      <tbody id="nCatsTableBody"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ОКТЯБРЬ · Посещения и конверсия -->
+<div class="sec" id="nov-sec-visits">
+  <p class="eyebrow">Посещения и конверсия · ноябрь 2026</p>
+  <div class="cards">
+    <div class="card blue"><div class="card-lbl">Всего посещений</div><div class="card-val blue" id="nv-total">—</div><div class="card-sub">итого за ноябрь</div></div>
+    <div class="card blue"><div class="card-lbl">Первых за ноябрь</div><div class="card-val blue" id="nv-first-month">—</div><div class="card-sub">пробные + приведи друга</div></div>
+    <div class="card purple"><div class="card-lbl">Продано First</div><div class="card-val purple" id="nv-first-sold">—</div><div class="card-sub">всего за ноябрь</div></div>
+    <div class="card"><div class="card-lbl">Конверсия First</div><div class="card-val" id="nv-conv">—</div><div class="card-sub">от первых посещений</div></div>
+  </div>
+  <div class="panel" id="visitsPanelNov">
+    <h3>Посещения — детализация</h3>
+    <div class="chart-h" id="visitChartWrapNov"><canvas id="chartNovVisits"></canvas></div>
+    <div class="legend" id="visitLegendNov">
+      <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Посещения</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--g);border-radius:50%"></div>Первые посещения (линия)</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Детализация по неделям</h3><div class="panel-sub"></div>
+    <div class="twrap"><table>
+      <thead><tr><th>Неделя</th><th class="r">Всего</th><th class="r">Динамика</th><th class="r">Первые посещения</th><th class="r">%</th></tr></thead>
+      <tbody id="nVisitTable"></tbody>
+    </table></div>
+  </div>
+  <div class="panel">
+    <h3>Первые посещения · Пробное vs Приведи друга</h3><div class="panel-sub">по неделям, шт.</div>
+    <div class="chart-h sm"><canvas id="chartNovFirstSplit"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Пробное занятие</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Приведи друга</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Первые посещения и покупки First</h3><div class="panel-sub">по неделям</div>
+    <div class="chart-h"><canvas id="chartNovTrialWeeks"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--pu)"></div>Первые посещения</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o);height:3px;border-radius:0;width:16px"></div>% конверсии</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Покупки после пробного · разрез по абонементам</h3><div class="panel-sub">детальный разбор когорты — данные пока не загружены</div>
+    <div style="position:relative;height:360px;width:100%"><canvas id="chartNovTrialPie2"></canvas></div>
+    <div id="nTrialPieLegend2" style="display:none"></div>
+  </div>
+  <canvas id="chartNovTrialPie" style="display:none"></canvas>
+  <div id="nTrialPieLegend" style="display:none"></div>
+</div>
+
+<div class="sec" id="nov-sec-trial" style="display:none!important">
+  <div id="ntr-trial" style="display:none"></div>
+  <div id="ntr-conv" style="display:none"></div>
+  <div id="ntr-avg" style="display:none"></div>
+  <div id="ntr-total-conv" style="display:none"></div>
+</div>
+
+<!-- ОКТЯБРЬ · Администраторы -->
+<div class="sec" id="nov-sec-admins">
+  <p class="eyebrow">Администраторы · ноябрь 2026</p>
+  <div class="cards">
+    <div class="card"><div class="card-lbl">Всего продаж</div><div class="card-val" id="na-total">—</div><div class="card-sub">ноябрь</div></div>
+    <div class="card"><div class="card-lbl">Услуги</div><div class="card-val" id="na-abon">—</div><div class="card-sub">абонементы</div></div>
+    <div class="card orange"><div class="card-lbl">Товары</div><div class="card-val orange" id="na-tovar">—</div><div class="card-sub">розничные</div></div>
+    <div class="card blue"><div class="card-lbl">Среднее в смену</div><div class="card-val blue" id="na-avg">—</div><div class="card-sub">все смены</div></div>
+    <div class="card"><div class="card-lbl">Лидер</div><div class="card-val sm" id="na-leader">—</div><div class="card-sub" id="na-leader-val">—</div></div>
+    <div class="card purple"><div class="card-lbl">Продажи First</div><div class="card-val purple" id="na-new">—</div><div class="card-sub" id="na-new-rub">—</div></div>
+    <div class="card orange"><div class="card-lbl">Ср. чек новичка</div><div class="card-val orange" id="na-new-avg">—</div><div class="card-sub">First 20%</div></div>
+  </div>
+  <div class="panel">
+    <h3>Детализация</h3><div class="panel-sub"></div>
+    <div class="twrap"><table>
+      <thead><tr><th style="width:32px">#</th><th>Администратор</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">Смены</th><th class="r">В смену</th><th class="r">First, шт.</th><th class="r">Новым, руб.</th></tr></thead>
+      <tbody id="nAdminTable"></tbody>
+    </table></div>
+  </div>
+  <div class="panel">
+    <h3>Услуги и товары по администраторам</h3><div class="panel-sub">ноябрь</div>
+    <div class="chart-h"><canvas id="chartNovAdmins"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Услуги</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Товары</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Продажи новичкам — First 20% · ноябрь</h3><div class="panel-sub"></div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:1;min-width:260px;position:relative;height:200px"><canvas id="chartNovNewbies"></canvas></div>
+      <div id="nNewbiesLegend" style="flex:1;min-width:200px;font-size:12px;line-height:2.1;align-self:center"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /month-nov -->
+
+<div class="mpane" id="month-dec">
+
+<!-- ОКТЯБРЬ · Продажи (объединены) -->
+<div class="sec active" id="dec-sec-sales">
+  <p class="eyebrow">Продажи · декабрь 2026</p>
+  <div class="cards">
+    <div class="card"><div class="card-lbl">Итого за период</div><div class="card-val" id="ds-total">—</div><div class="card-sub">услуги + товары</div></div>
+    <div class="card"><div class="card-lbl">Услуги</div><div class="card-val" id="ds-abon">—</div><div class="card-sub">абонементы студии</div></div>
+    <div class="card orange"><div class="card-lbl">Товары</div><div class="card-val orange" id="ds-tovar">—</div><div class="card-sub">розничные продажи</div></div>
+    <div class="card purple"><div class="card-lbl">План на месяц</div><div class="card-val purple" id="ds-plan">—</div><div class="card-sub">нет данных</div></div>
+  </div>
+  <div class="panel">
+    <h3>Продажи по неделям</h3><div class="panel-sub">услуги и товары · декабрь 2026</div>
+    <div class="chart-h"><canvas id="chartDecWeekly"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Услуги</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Товары</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--pu);height:3px;border-radius:0;border-top:2px dashed var(--pu)"></div>План</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Детализация по неделям</h3><div class="panel-sub"></div>
+    <div class="twrap"><table>
+      <thead><tr><th>Неделя</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Корп. FITMOST</th><th class="r">Итого</th><th class="r">% плана нед.</th><th class="r">Накоплено</th><th class="r">Посещения</th></tr></thead>
+      <tbody id="dWeekTable"></tbody>
+    </table></div>
+  </div>
+  <div class="chart-row">
+    <div class="panel" style="margin-bottom:0">
+      <h3>Услуги по времени</h3><div class="panel-sub">утро · вечер · выходные · тыс ₽</div>
+      <div class="chart-h sm"><canvas id="chartDecAbonCats"></canvas></div>
+      <div class="legend" style="margin-top:8px">
+        <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Выходные</div>
+        <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Вечер</div>
+        <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Утро</div>
+      </div>
+    </div>
+    <div class="panel" style="margin-bottom:0">
+      <h3>Товары по времени</h3><div class="panel-sub">утро · вечер · выходные · тыс ₽</div>
+      <div class="chart-h sm"><canvas id="chartDecTovarCats"></canvas></div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Детализация по категориям</h3><div class="panel-sub">услуги (детальный отчёт 1С) + Фитмост + товары · Летний безлимит выделен отдельно</div>
+    <div class="twrap"><table id="dCatsTable">
+      <thead><tr>
+        <th>Категория</th>
+        <th class="r" style="background:#4a5429">Итого декабрь</th>
+      </tr></thead>
+      <tbody id="dCatsTableBody"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ОКТЯБРЬ · Посещения и конверсия -->
+<div class="sec" id="dec-sec-visits">
+  <p class="eyebrow">Посещения и конверсия · декабрь 2026</p>
+  <div class="cards">
+    <div class="card blue"><div class="card-lbl">Всего посещений</div><div class="card-val blue" id="dv-total">—</div><div class="card-sub">итого за декабрь</div></div>
+    <div class="card blue"><div class="card-lbl">Первых за декабрь</div><div class="card-val blue" id="dv-first-month">—</div><div class="card-sub">пробные + приведи друга</div></div>
+    <div class="card purple"><div class="card-lbl">Продано First</div><div class="card-val purple" id="dv-first-sold">—</div><div class="card-sub">всего за декабрь</div></div>
+    <div class="card"><div class="card-lbl">Конверсия First</div><div class="card-val" id="dv-conv">—</div><div class="card-sub">от первых посещений</div></div>
+  </div>
+  <div class="panel" id="visitsPanelDec">
+    <h3>Посещения — детализация</h3>
+    <div class="chart-h" id="visitChartWrapDec"><canvas id="chartDecVisits"></canvas></div>
+    <div class="legend" id="visitLegendDec">
+      <div class="leg"><div class="leg-dot" style="background:var(--b)"></div>Посещения</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--g);border-radius:50%"></div>Первые посещения (линия)</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Детализация по неделям</h3><div class="panel-sub"></div>
+    <div class="twrap"><table>
+      <thead><tr><th>Неделя</th><th class="r">Всего</th><th class="r">Динамика</th><th class="r">Первые посещения</th><th class="r">%</th></tr></thead>
+      <tbody id="dVisitTable"></tbody>
+    </table></div>
+  </div>
+  <div class="panel">
+    <h3>Первые посещения · Пробное vs Приведи друга</h3><div class="panel-sub">по неделям, шт.</div>
+    <div class="chart-h sm"><canvas id="chartDecFirstSplit"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Пробное занятие</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Приведи друга</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Первые посещения и покупки First</h3><div class="panel-sub">по неделям</div>
+    <div class="chart-h"><canvas id="chartDecTrialWeeks"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--pu)"></div>Первые посещения</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o);height:3px;border-radius:0;width:16px"></div>% конверсии</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Покупки после пробного · разрез по абонементам</h3><div class="panel-sub">детальный разбор когорты — данные пока не загружены</div>
+    <div style="position:relative;height:360px;width:100%"><canvas id="chartDecTrialPie2"></canvas></div>
+    <div id="dTrialPieLegend2" style="display:none"></div>
+  </div>
+  <canvas id="chartDecTrialPie" style="display:none"></canvas>
+  <div id="dTrialPieLegend" style="display:none"></div>
+</div>
+
+<div class="sec" id="dec-sec-trial" style="display:none!important">
+  <div id="dtr-trial" style="display:none"></div>
+  <div id="dtr-conv" style="display:none"></div>
+  <div id="dtr-avg" style="display:none"></div>
+  <div id="dtr-total-conv" style="display:none"></div>
+</div>
+
+<!-- ОКТЯБРЬ · Администраторы -->
+<div class="sec" id="dec-sec-admins">
+  <p class="eyebrow">Администраторы · декабрь 2026</p>
+  <div class="cards">
+    <div class="card"><div class="card-lbl">Всего продаж</div><div class="card-val" id="da-total">—</div><div class="card-sub">декабрь</div></div>
+    <div class="card"><div class="card-lbl">Услуги</div><div class="card-val" id="da-abon">—</div><div class="card-sub">абонементы</div></div>
+    <div class="card orange"><div class="card-lbl">Товары</div><div class="card-val orange" id="da-tovar">—</div><div class="card-sub">розничные</div></div>
+    <div class="card blue"><div class="card-lbl">Среднее в смену</div><div class="card-val blue" id="da-avg">—</div><div class="card-sub">все смены</div></div>
+    <div class="card"><div class="card-lbl">Лидер</div><div class="card-val sm" id="da-leader">—</div><div class="card-sub" id="da-leader-val">—</div></div>
+    <div class="card purple"><div class="card-lbl">Продажи First</div><div class="card-val purple" id="da-new">—</div><div class="card-sub" id="da-new-rub">—</div></div>
+    <div class="card orange"><div class="card-lbl">Ср. чек новичка</div><div class="card-val orange" id="da-new-avg">—</div><div class="card-sub">First 20%</div></div>
+  </div>
+  <div class="panel">
+    <h3>Детализация</h3><div class="panel-sub"></div>
+    <div class="twrap"><table>
+      <thead><tr><th style="width:32px">#</th><th>Администратор</th><th class="r">Услуги</th><th class="r">Товары</th><th class="r">Итого</th><th class="r">Смены</th><th class="r">В смену</th><th class="r">First, шт.</th><th class="r">Новым, руб.</th></tr></thead>
+      <tbody id="dAdminTable"></tbody>
+    </table></div>
+  </div>
+  <div class="panel">
+    <h3>Услуги и товары по администраторам</h3><div class="panel-sub">декабрь</div>
+    <div class="chart-h"><canvas id="chartDecAdmins"></canvas></div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--g)"></div>Услуги</div>
+      <div class="leg"><div class="leg-dot" style="background:var(--o)"></div>Товары</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Продажи новичкам — First 20% · декабрь</h3><div class="panel-sub"></div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:1;min-width:260px;position:relative;height:200px"><canvas id="chartDecNewbies"></canvas></div>
+      <div id="dNewbiesLegend" style="flex:1;min-width:200px;font-size:12px;line-height:2.1;align-self:center"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /month-dec -->
+
 </div><!-- /main -->
 
 <script>
@@ -1249,7 +1547,9 @@ const MONTHLY={
   jul:{total:3709647,abon:3217292,tovar:492355},
   aug:{total:3945816,abon:3471525,tovar:474291},
   sep:{total:4352428,abon:3867680,tovar:484748},
-  oct:{total:0,abon:0,tovar:0},
+  oct:{total:4610854,abon:4061564,tovar:549290},
+  nov:{total:0,abon:0,tovar:0},
+  dec:{total:0,abon:0,tovar:0},
 };
 
 // ── ДАННЫЕ МАЙ 2026 (реальные данные из недельных отчётов 1С) ──
@@ -1502,6 +1802,59 @@ const NEWBIES_SEP={
 
 // ── ДАННЫЕ ОКТЯБРЬ 2026 (заполняется поэтапно из недельных отчётов 1С) ──
 const WEEKS_OCT={
+  labels:['1–4 октября','5–11 октября','12–18 октября','19–25 октября','26–31 октября'],
+  abon:  [477695,969118,728489,937676,868786],
+  tovar: [58222,112704,136944,144890,96530],
+  visits:[424,753,663,756,655],
+  first: [52,82,50,84,100],
+  plan:  [464516,812903,812903,812903,696775],
+};
+const FITMOST_OCT=79800; // Корп. FITMOST — 101 посещение за октябрь, внешний отчёт Fitmost, разбивки по неделям пока нет
+WEEKS_OCT.total=WEEKS_OCT.abon.map((a,i)=>a+WEEKS_OCT.tovar[i]);
+const OCT_MONTH_PLAN=3600000; // план на октябрь
+
+const CATS_OCT={
+  labels:WEEKS_OCT.labels,
+  abon: {morn:[105,254,186,142,251], eve:[116,396,369,504,452], wknd:[257,319,174,291,165]},
+  tovar:{morn:[10,23,27,18,16],      eve:[21,52,82,83,65],       wknd:[27,37,28,44,16]},
+};
+
+const TRIAL_OCT={
+  labels:WEEKS_OCT.labels,
+  visits:[424,753,663,756,655],
+  trial: [52,82,50,84,100],
+  conversion:[0,0,0,0,0], // понедельная разбивка First — после понедельных файлов 1С
+};
+const FIRST_SPLIT_OCT={
+  labels:WEEKS_OCT.labels,
+  trial: [48,73,45,74,93],
+  friend:[4,9,5,10,7],
+};
+
+const ADMINS_OCT=[
+  {name:'Аня Ц',      abon:386395,tovar:85336, shifts:11,newQty:18,newRub:120640},
+  {name:'Аня Л',      abon:278196,tovar:72887, shifts:6, newQty:11,newRub:118800},
+  {name:'Виктория Б', abon:203495,tovar:34793, shifts:4, newQty:11,newRub:59200},
+  {name:'Алина Ф',    abon:60450, tovar:11315, shifts:2, newQty:4, newRub:20000},
+  {name:'Яна Ч',      abon:335275,tovar:69329, shifts:9, newQty:16,newRub:125320},
+  {name:'Мария С',    abon:469413,tovar:122838,shifts:12,newQty:19,newRub:123520},
+  {name:'Марина Д',   abon:392352,tovar:100945,shifts:10,newQty:24,newRub:148520},
+  {name:'Настя П',    abon:406620,tovar:54897, shifts:8, newQty:18,newRub:134440},
+].map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0}))
+ .sort((a,b)=>b.total-a.total);
+
+const TRIAL_PIE2_OCT={labels:['Абонемент 5','Абонемент 10','Абонемент 20','Безлимит'],qty:[82,27,9,3],revenue:[411000,248400,150480,40560],colors:['#5c6937','#a3b86d','#F0803B','#9b89c4']};
+
+const NEWBIES_OCT={
+  labels:['Марина Д','Настя П','Яна Ч','Мария С','Аня Ц','Аня Л','Виктория Б','Алина Ф'],
+  qty:[24,18,16,19,18,11,11,4],
+  revenue:[148520,134440,125320,123520,120640,118800,59200,20000],
+  colors:['#5C6937','#A2B9C9','#9b89c4','#F0803B','#cae7fb','#c8956a','#7C8760','#A5A09D'],
+};
+
+
+// ── ДАННЫЕ НОЯБРЬ 2026 (заполняется поэтапно из недельных отчётов 1С) ──
+const WEEKS_NOV={
   labels:[],
   abon:  [],
   tovar: [],
@@ -1509,38 +1862,81 @@ const WEEKS_OCT={
   first: [],
   plan:  [],
 };
-WEEKS_OCT.total=WEEKS_OCT.abon.map((a,i)=>a+WEEKS_OCT.tovar[i]);
-const OCT_MONTH_PLAN=3600000; // план на октябрь
+WEEKS_NOV.total=WEEKS_NOV.abon.map((a,i)=>a+WEEKS_NOV.tovar[i]);
+const NOV_MONTH_PLAN=3800000; // план на ноябрь (3,8 млн)
 
-const CATS_OCT={
-  labels:WEEKS_OCT.labels,
+const CATS_NOV={
+  labels:WEEKS_NOV.labels,
   abon: {morn:[], eve:[], wknd:[]},
   tovar:{morn:[], eve:[], wknd:[]},
 };
 
-const TRIAL_OCT={
-  labels:WEEKS_OCT.labels,
+const TRIAL_NOV={
+  labels:WEEKS_NOV.labels,
   visits:[],
   trial: [],
   conversion:[],
 };
-const FIRST_SPLIT_OCT={
-  labels:WEEKS_OCT.labels,
+const FIRST_SPLIT_NOV={
+  labels:WEEKS_NOV.labels,
   trial: [],
   friend:[],
 };
 
-const ADMINS_OCT=[
+const ADMINS_NOV=[
 ].map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0}))
  .sort((a,b)=>b.total-a.total);
 
-const TRIAL_PIE2_OCT={labels:[],qty:[],revenue:[],colors:['#5c6937','#a3b86d','#F0803B','#9b89c4']};
+const TRIAL_PIE2_NOV={labels:[],qty:[],revenue:[],colors:['#5c6937','#a3b86d','#F0803B','#9b89c4']};
 
-const NEWBIES_OCT={
+const NEWBIES_NOV={
   labels:[],
   qty:[],
   revenue:[],
-  colors:['#5C6937','#A2B9C9','#9b89c4','#F0803B','#cae7fb','#c8956a','#7C8760'],
+  colors:['#5C6937','#A2B9C9','#9b89c4','#F0803B','#cae7fb','#c8956a','#7C8760','#A5A09D'],
+};
+
+// ── ДАННЫЕ ДЕКАБРЬ 2026 (заполняется поэтапно из недельных отчётов 1С) ──
+const WEEKS_DEC={
+  labels:[],
+  abon:  [],
+  tovar: [],
+  visits:[],
+  first: [],
+  plan:  [],
+};
+WEEKS_DEC.total=WEEKS_DEC.abon.map((a,i)=>a+WEEKS_DEC.tovar[i]);
+const DEC_MONTH_PLAN=4000000; // план на декабрь (4 млн)
+
+const CATS_DEC={
+  labels:WEEKS_DEC.labels,
+  abon: {morn:[], eve:[], wknd:[]},
+  tovar:{morn:[], eve:[], wknd:[]},
+};
+
+const TRIAL_DEC={
+  labels:WEEKS_DEC.labels,
+  visits:[],
+  trial: [],
+  conversion:[],
+};
+const FIRST_SPLIT_DEC={
+  labels:WEEKS_DEC.labels,
+  trial: [],
+  friend:[],
+};
+
+const ADMINS_DEC=[
+].map(d=>({...d,total:d.abon+d.tovar,perShift:d.shifts>0?Math.round((d.abon+d.tovar)/d.shifts):0}))
+ .sort((a,b)=>b.total-a.total);
+
+const TRIAL_PIE2_DEC={labels:[],qty:[],revenue:[],colors:['#5c6937','#a3b86d','#F0803B','#9b89c4']};
+
+const NEWBIES_DEC={
+  labels:[],
+  qty:[],
+  revenue:[],
+  colors:['#5C6937','#A2B9C9','#9b89c4','#F0803B','#cae7fb','#c8956a','#7C8760','#A5A09D'],
 };
 
 // ── УТИЛИТЫ ──────────────────────────────────
@@ -1847,6 +2243,34 @@ const CATS_WEEKLY = {
   oct: {
     cols: ['Итого октябрь'],
     rows: [
+      {name:'Абонементы групповые',         vals:[3095891]},
+      {name:'Разовые',                      vals:[589830]},
+      {name:'Мероприятия: Пакет Практика+Лаборатория Дживамукти (12 шт.)', vals:[46000]},
+      {name:'Мероприятия: Конструктор йоги с Ильёй Бариновым (12 шт.)', vals:[41000]},
+      {name:'Мероприятия: Практика Дживамукти, открытый класс (20 шт.)', vals:[37841]},
+      {name:'Мероприятия: Лаборатория Дживамукти, ассистирование (10 шт.)', vals:[25203]},
+      {name:'Абонементы майсор',            vals:[97099]},
+      {name:'Абонементы индивидуальные',    vals:[33500]},
+      {name:'Аренда',                       vals:[15400]},
+      {name:'Корп. FITMOST',                vals:[79800]},
+      {name:'Товары',                       vals:[549290]},
+    ],
+  },
+  nov: {
+    cols: ['Итого ноябрь'],
+    rows: [
+      {name:'Абонементы групповые',         vals:[null]},
+      {name:'Разовые',                      vals:[null]},
+      {name:'Абонементы майсор',            vals:[null]},
+      {name:'Абонементы индивидуальные',    vals:[null]},
+      {name:'Аренда',                       vals:[null]},
+      {name:'Корп. FITMOST',                vals:[null]},
+      {name:'Товары',                       vals:[null]},
+    ],
+  },
+  dec: {
+    cols: ['Итого декабрь'],
+    rows: [
       {name:'Абонементы групповые',         vals:[null]},
       {name:'Разовые',                      vals:[null]},
       {name:'Абонементы майсор',            vals:[null]},
@@ -1860,7 +2284,7 @@ const CATS_WEEKLY = {
 
 function renderCatsTable(prefix) {
   const data = CATS_WEEKLY[prefix];
-  const tbodyId = prefix === 'apr' ? 'aCatsTableBody' : prefix === 'jun' ? 'jCatsTableBody' : prefix === 'jul' ? 'lCatsTableBody' : prefix === 'aug' ? 'gCatsTableBody' : prefix === 'sep' ? 'sCatsTableBody' : prefix === 'oct' ? 'oCatsTableBody' : prefix === 'may' ? 'yCatsTableBody' : 'mCatsTableBody';
+  const tbodyId = prefix === 'apr' ? 'aCatsTableBody' : prefix === 'jun' ? 'jCatsTableBody' : prefix === 'jul' ? 'lCatsTableBody' : prefix === 'aug' ? 'gCatsTableBody' : prefix === 'sep' ? 'sCatsTableBody' : prefix === 'oct' ? 'oCatsTableBody' : prefix === 'nov' ? 'nCatsTableBody' : prefix === 'dec' ? 'dCatsTableBody' : prefix === 'may' ? 'yCatsTableBody' : 'mCatsTableBody';
   const tbody = document.getElementById(tbodyId);
   if (!tbody) return;
   tbody.innerHTML = '';
@@ -3538,7 +3962,7 @@ function renderOct(){
       else if(typeof TRIAL_SEP!=='undefined' && TRIAL_SEP.visits.length){
         // Первая неделя месяца — сравниваем с последней неделей предыдущего месяца
         const prevLastVisits=TRIAL_SEP.visits[TRIAL_SEP.visits.length-1];
-        trendStr=trend(W.visits[i],prevLastVisits)+' <span style="font-size:10px;color:var(--muted)">к @@октябрю</span>';
+        trendStr=trend(W.visits[i],prevLastVisits)+' <span style="font-size:10px;color:var(--muted)">к сентябрю</span>';
       } else { trendStr=''; }
       tr.innerHTML=`<td>${lbl}</td><td class="r">${fmtN(W.visits[i])}</td>
         <td class="r">${trendStr}</td>
@@ -3562,7 +3986,7 @@ function renderOct(){
   // 3. КОНВЕРСИЯ / FIRST
   (function(){
     if(!T.labels.length){return;}
-    const convPct=T.conversion.map((c,i)=>T.trial[i]>0?Math.round(c/T.trial[i]*100):null);
+    const convPct=T.conversion.map((c,i)=>(T.trial[i]>0&&T.conversion.some(x=>x>0))?Math.round(c/T.trial[i]*100):null);
     new Chart(document.getElementById('chartOctTrialWeeks'),{type:'bar',
       data:{labels:T.labels,datasets:[
         {label:'Купили First',data:T.conversion,backgroundColor:'rgba(92,105,55,.82)',
@@ -3664,7 +4088,7 @@ function renderOct(){
       const addTrend=(id,cur,prev)=>{
         const el=document.getElementById(id);
         if(!el) return;
-        el.insertAdjacentHTML('beforeend',' '+trend(cur,prev)+' <span style="font-size:10px;color:var(--muted)">к @@октябрю</span>');
+        el.insertAdjacentHTML('beforeend',' '+trend(cur,prev)+' <span style="font-size:10px;color:var(--muted)">к сентябрю</span>');
       };
       addTrend('oa-total',totalAll,prevAll);
       addTrend('oa-abon',totalAbon,prevAbon);
@@ -3726,9 +4150,9 @@ function renderOct(){
     safeSet('oa-new-avg',avgNew>0?fmtK(avgNew):'—');
     {
       const el1=document.getElementById('oa-new-rub');
-      if(el1&&typeof window._prevNewR_oct!=='undefined') el1.insertAdjacentHTML('beforeend',' '+trend(totalNewR,window._prevNewR_oct)+' <span style="font-size:10px;color:var(--muted)">к @@октябрю</span>');
+      if(el1&&typeof window._prevNewR_oct!=='undefined') el1.insertAdjacentHTML('beforeend',' '+trend(totalNewR,window._prevNewR_oct)+' <span style="font-size:10px;color:var(--muted)">к сентябрю</span>');
       const el2=document.getElementById('oa-new-avg');
-      if(el2&&typeof window._prevNewAvg_oct!=='undefined') el2.insertAdjacentHTML('beforeend',' '+trend(avgNew,window._prevNewAvg_oct)+' <span style="font-size:10px;color:var(--muted)">к @@октябрю</span>');
+      if(el2&&typeof window._prevNewAvg_oct!=='undefined') el2.insertAdjacentHTML('beforeend',' '+trend(avgNew,window._prevNewAvg_oct)+' <span style="font-size:10px;color:var(--muted)">к сентябрю</span>');
     }
     new Chart(document.getElementById('chartOctNewbies'),{type:'bar',
       data:{labels:NEWBIES_OCT.labels,datasets:[{label:'Продажи новичкам',data:NEWBIES_OCT.revenue,backgroundColor:NEWBIES_OCT.colors,borderRadius:6,
@@ -3744,6 +4168,682 @@ function renderOct(){
 }
 
 
+function renderNov(){
+  const W=WEEKS_NOV, C=CATS_NOV, T=TRIAL_NOV;
+  const safeSet=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  renderCatsTable('nov');
+
+  // 1. ПРОДАЖИ
+  (function(){
+    if(!W.labels.length){const pe=document.getElementById('ns-plan');if(pe){pe.textContent=fmtK(3800000);const ps=pe.parentElement.querySelector('.card-sub');if(ps)ps.textContent='план на ноябрь';}return;}
+    const totalAll=MONTHLY.oct.total, abonAll=MONTHLY.oct.abon, tovarAll=MONTHLY.oct.tovar;
+    const avgWeek=Math.round(totalAll/W.labels.length);
+    const bestIdx=W.total.indexOf(Math.max(...W.total));
+    safeSet('ns-total',fmtK(totalAll));
+    safeSet('ns-abon', fmtK(abonAll));
+    safeSet('ns-tovar',fmtK(tovarAll));
+    safeSet('os-avg',  fmtK(avgWeek));
+    safeSet('os-best', W.labels[bestIdx]);
+    safeSet('os-best-val', fmt(W.total[bestIdx]));
+
+    const planEl=document.getElementById('ns-plan');
+    const planSubEl=planEl.parentElement.querySelector('.card-sub');
+    const monthPlan=3800000;
+    planEl.textContent=fmtK(monthPlan);
+    {const p=Math.round(totalAll/monthPlan*100);
+     const c=p>=100?G:p>=85?O:'#c0522a';
+     planSubEl.innerHTML=`<span style="color:${c};font-weight:600">${p}% плана за месяц</span>`;}
+
+    const tb=document.getElementById('nWeekTable');
+    const fmHasWeekly = typeof FITMOST_NOV_WEEKLY!=='undefined';
+    const fmWeekly = fmHasWeekly ? FITMOST_NOV_WEEKLY : W.labels.map(()=>0);
+    let cumul=0,cumulPlanSum=0;
+    W.labels.forEach((lbl,i)=>{
+      const tr=document.createElement('tr');
+      const fmWk=fmWeekly[i]||0;
+      const rowTotal=W.total[i]+fmWk;
+      const trendStr=i>0?trend(W.total[i]+fmWeekly[i],W.total[i-1]+fmWeekly[i-1]):'';
+      const wPlan=W.plan[i];
+      const planPct=wPlan>0?Math.round(rowTotal/wPlan*100):null;
+      if(wPlan>0){cumul+=rowTotal;cumulPlanSum+=wPlan;}
+      const cumulPct=cumulPlanSum>0?Math.round(cumul/cumulPlanSum*100):null;
+      tr.innerHTML=`<td>${lbl}</td>
+        <td class="r">${fmt(W.abon[i])}</td>
+        <td class="r">${fmt(W.tovar[i])}</td>
+        <td class="r" style="color:var(--muted)">${fmHasWeekly?fmt(fmWk):'—'}</td>
+        <td class="r">${fmt(rowTotal)} ${trendStr}</td>
+        <td class="r">${planPct!==null?planPill(planPct):'—'}</td>
+        <td class="r">${cumulPct!==null?planPill(cumulPct):'—'}</td>
+        <td class="r">${fmtN(W.visits[i])}</td>`;
+      tb.appendChild(tr);
+    });
+    const tf=document.createElement('tr');tf.className='tfoot';
+    const visTotal=W.visits.reduce((s,v)=>s+v,0);
+    const abonSum1C=W.abon.reduce((s,v)=>s+v,0);
+    const fmSum=fmHasWeekly?fmWeekly.reduce((s,v)=>s+v,0):(typeof FITMOST_NOV!=='undefined'?FITMOST_NOV:0);
+    tf.innerHTML=`<td>Итого</td><td class="r">${fmt(abonSum1C)}</td><td class="r">${fmt(tovarAll)}</td>
+      <td class="r">${fmt(fmSum)}</td><td class="r">${fmt(totalAll)}</td><td class="r">—</td><td class="r">—</td><td class="r">${fmtN(visTotal)}</td>`;
+    tb.appendChild(tf);
+
+
+    new Chart(document.getElementById('chartNovWeekly'),{type:'bar',
+      data:{labels:W.labels,datasets:[
+        {label:'Абонементы',data:W.abon,backgroundColor:W.labels.map(()=>G),
+          borderRadius:{topLeft:0,topRight:0,bottomLeft:5,bottomRight:5},order:2,stack:'s',
+          datalabels:{display:ctx=>W.abon[ctx.dataIndex]>0,anchor:'center',align:'center',font:{size:10,weight:'600'},color:'white',formatter:v=>Math.round(v/1000)+'к'}},
+        {label:'Товары',data:W.tovar,backgroundColor:W.labels.map(()=>O),
+          borderRadius:{topLeft:5,topRight:5,bottomLeft:0,bottomRight:0},order:2,stack:'s',
+          datalabels:{display:ctx=>W.tovar[ctx.dataIndex]>50000,anchor:'center',align:'center',font:{size:9,weight:'600'},color:'white',formatter:v=>Math.round(v/1000)+'к'}},
+        {label:'План',data:W.plan,type:'line',borderColor:PU,borderDash:[6,4],pointRadius:0,borderWidth:2,fill:false,order:1,
+          datalabels:{display:false}},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}}}}
+    });
+
+    const sets=[{label:'Выходные',key:'wknd',c:G},{label:'Вечер',key:'eve',c:O},{label:'Утро',key:'morn',c:B}];
+    const stackChart=(canvasId,labels,data,showSums)=>{
+      new Chart(document.getElementById(canvasId),{type:'bar',
+        data:{labels,datasets:sets.map(s=>({
+          label:s.label,data:toRub(data[s.key]),
+          backgroundColor:labels.map(()=>s.c),
+          borderRadius:3,stack:'s',
+          datalabels:{
+            display:ctx=>{const v=toRub(data[s.key])[ctx.dataIndex];return showSums?v>500:v>50000;},
+            anchor:'center',align:'center',
+            font:{size:showSums?9:10,weight:'600'},color:'white',
+            formatter:v=>showSums?Math.round(v/1000)+'к':Math.round(v/1000),
+          },
+        }))},
+        options:{responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
+          scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}}}}
+      });
+    };
+    stackChart('chartNovAbonCats',C.labels,C.abon,false);
+    stackChart('chartNovTovarCats',C.labels,C.tovar,true);
+  })();
+
+  // 2. ПОСЕЩЕНИЯ
+  (function(){
+    if(!W.labels.length){return;}
+    const totalVisits=W.visits.reduce((s,v)=>s+v,0);
+    const totalFirst=W.first.reduce((s,v)=>s+v,0);
+    safeSet('nv-total', fmtN(totalVisits));
+    safeSet('nv-first-month', fmtN(totalFirst));
+    {
+      const totalTrial=FIRST_SPLIT_NOV.trial.reduce((s,v)=>s+v,0);
+      const totalFriend=FIRST_SPLIT_NOV.friend.reduce((s,v)=>s+v,0);
+      const subEl=document.getElementById('nv-first-month').parentElement.querySelector('.card-sub');
+      subEl.innerHTML=`пробное ${totalTrial} · друг ${totalFriend}`;
+    }
+
+    new Chart(document.getElementById('chartNovVisits'),{type:'bar',
+      data:{labels:W.labels,datasets:[
+        {label:'Посещения',data:W.visits,backgroundColor:W.labels.map(()=>B),borderRadius:5,order:2,
+          datalabels:{anchor:'end',align:'end',offset:2,font:{size:11,weight:'600'},color:'#6ab4d8',formatter:v=>fmtN(v)}},
+        {label:'Первые посещения',data:W.first,type:'line',borderColor:G,pointBackgroundColor:G,
+          pointRadius:5,borderWidth:2,fill:false,order:1,
+          datalabels:{display:true,anchor:'end',align:'top',offset:4,font:{size:11,weight:'600'},color:G,formatter:v=>v+''}},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+' чел.'}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(92,105,55,.07)'},suggestedMax:Math.max(...W.visits)*1.25}}}
+    });
+
+    const tb=document.getElementById('nVisitTable');
+    W.labels.forEach((lbl,i)=>{
+      const tr=document.createElement('tr');
+      let trendStr;
+      if(i>0){ trendStr=trend(W.visits[i],W.visits[i-1]); }
+      else if(typeof TRIAL_OCT!=='undefined' && TRIAL_OCT.visits.length){
+        // Первая неделя месяца — сравниваем с последней неделей предыдущего месяца
+        const prevLastVisits=TRIAL_OCT.visits[TRIAL_OCT.visits.length-1];
+        trendStr=trend(W.visits[i],prevLastVisits)+' <span style="font-size:10px;color:var(--muted)">к октябрю</span>';
+      } else { trendStr=''; }
+      tr.innerHTML=`<td>${lbl}</td><td class="r">${fmtN(W.visits[i])}</td>
+        <td class="r">${trendStr}</td>
+        <td class="r">${fmtN(W.first[i])}</td><td class="r">${pct(W.first[i],W.visits[i])}</td>`;
+      tb.appendChild(tr);
+    });
+
+    new Chart(document.getElementById('chartNovFirstSplit'),{type:'bar',
+      data:{labels:FIRST_SPLIT_NOV.labels,datasets:[
+        {label:'Пробное занятие',data:FIRST_SPLIT_NOV.trial,backgroundColor:G,stack:'s',borderRadius:3,
+          datalabels:{anchor:'center',align:'center',font:{size:10,weight:'600'},color:'white',formatter:v=>v}},
+        {label:'Приведи друга',data:FIRST_SPLIT_NOV.friend,backgroundColor:O,stack:'s',borderRadius:3,
+          datalabels:{anchor:'center',align:'center',font:{size:9,weight:'600'},color:'white',formatter:v=>v>0?v:''}},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'}}}}
+    });
+  })();
+
+  // 3. КОНВЕРСИЯ / FIRST
+  (function(){
+    if(!T.labels.length){return;}
+    const convPct=T.conversion.map((c,i)=>(T.trial[i]>0&&T.conversion.some(x=>x>0))?Math.round(c/T.trial[i]*100):null);
+    new Chart(document.getElementById('chartNovTrialWeeks'),{type:'bar',
+      data:{labels:T.labels,datasets:[
+        {label:'Купили First',data:T.conversion,backgroundColor:'rgba(92,105,55,.82)',
+          stack:'visits',borderRadius:0,order:2,yAxisID:'y',
+          datalabels:{display:ctx=>T.conversion[ctx.dataIndex]>0,anchor:'center',align:'center',
+            font:{size:10,weight:'700'},color:'#fff',formatter:v=>v>0?v+' абон.':''}},
+        {label:'Остальные первые',data:T.trial.map((v,i)=>v-(T.conversion[i]||0)),
+          backgroundColor:'rgba(155,137,196,.55)',
+          stack:'visits',borderRadius:5,order:2,yAxisID:'y',
+          datalabels:{display:ctx=>true,anchor:'end',align:'end',offset:3,
+            font:{size:10,weight:'600'},color:PU,formatter:(v,ctx)=>T.trial[ctx.dataIndex]}},
+        {label:'% конверсии',data:convPct,type:'line',borderColor:O,pointBackgroundColor:O,
+          pointRadius:5,borderWidth:2,fill:false,order:1,yAxisID:'y1',datalabels:{display:false}}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:ctx=>ctx.datasetIndex===2?ctx.dataset.label+': '+(ctx.raw!=null?ctx.raw+'%':'—'):ctx.dataset.label+': '+ctx.raw}}},
+        scales:{x:{stacked:true,grid:{display:false}},
+          y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},title:{display:true,text:'Пробных, шт.'}},
+          y1:{position:'right',grid:{display:false},title:{display:true,text:'Конверсия, %'},ticks:{callback:v=>v+'%'}}}}
+    });
+
+    new Chart(document.getElementById('chartNovTrialPie2'),{type:'doughnut',
+      data:{labels:TRIAL_PIE2_NOV.labels,datasets:[{data:TRIAL_PIE2_NOV.qty,backgroundColor:TRIAL_PIE2_NOV.colors,borderWidth:2}]},
+      plugins:[{id:'outlabel',afterDraw(chart){
+        const {ctx,chartArea,data}=chart;
+        const meta=chart.getDatasetMeta(0);
+        const cx=(chartArea.left+chartArea.right)/2, cy=(chartArea.top+chartArea.bottom)/2;
+        meta.data.forEach((arc,i)=>{
+          const mid=(arc.startAngle+arc.endAngle)/2;
+          const r=arc.outerRadius;
+          const col=data.datasets[0].backgroundColor[i];
+          const cos=Math.cos(mid), sin=Math.sin(mid);
+          ctx.save();
+          ctx.strokeStyle=col; ctx.lineWidth=1; ctx.globalAlpha=0.7;
+          ctx.beginPath();
+          ctx.moveTo(cx+(r+4)*cos, cy+(r+4)*sin);
+          ctx.lineTo(cx+(r+24)*cos, cy+(r+24)*sin);
+          ctx.stroke();
+          ctx.globalAlpha=1;
+          const lx=cx+(r+30)*cos, ly=cy+(r+30)*sin;
+          ctx.textAlign=cos>0.12?'left':cos<-0.12?'right':'center';
+          ctx.textBaseline='middle';
+          ctx.fillStyle=col;
+          ctx.font='bold 11px Montserrat,sans-serif';
+          ctx.fillText(data.labels[i], lx, ly-8);
+          ctx.font='10px Montserrat,sans-serif';
+          ctx.fillText(data.datasets[0].data[i]+' шт.', lx, ly+7);
+          ctx.restore();
+        });
+        const total=data.datasets[0].data.reduce((s,v)=>s+v,0);
+        ctx.save();
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillStyle='#3A3A2A';
+        ctx.font='bold 20px Montserrat,sans-serif';
+        ctx.fillText(total, cx, cy-9);
+        ctx.fillStyle='#aaa';
+        ctx.font='11px Montserrat,sans-serif';
+        ctx.fillText('абон.', cx, cy+10);
+        ctx.restore();
+      }}],
+      options:{responsive:true,maintainAspectRatio:false,
+        layout:{padding:{top:65,bottom:65,left:130,right:130}},
+        plugins:{datalabels:{display:false},legend:{display:false}}
+      }
+    });
+  })();
+
+  // 4. АДМИНИСТРАТОРЫ
+  (function(){
+    if(!ADMINS_NOV.length){return;}
+    const active=ADMINS_NOV.filter(a=>a.total>0);
+    const totalAbon=ADMINS_NOV.reduce((s,a)=>s+a.abon,0);
+    const totalTovar=ADMINS_NOV.reduce((s,a)=>s+a.tovar,0);
+    const totalAll=totalAbon+totalTovar;
+    const totalNew=ADMINS_NOV.reduce((s,a)=>s+a.newQty,0);
+    const totalNewR=ADMINS_NOV.reduce((s,a)=>s+a.newRub,0);
+    const leader=active[0];
+    // Сравнение с предыдущим месяцем (июль) — по правилу "текущий месяц vs предыдущий"
+    const prevAbon=ADMINS_OCT.reduce((s,a)=>s+a.abon,0);
+    const prevTovar=ADMINS_OCT.reduce((s,a)=>s+a.tovar,0);
+    const prevAll=prevAbon+prevTovar;
+    const prevShifts=ADMINS_OCT.reduce((s,a)=>s+a.shifts,0);
+    const prevAvgShift=prevShifts>0?prevAll/prevShifts:0;
+    const prevNew=ADMINS_OCT.reduce((s,a)=>s+a.newQty,0);
+    const prevNewR=ADMINS_OCT.reduce((s,a)=>s+a.newRub,0);
+    const prevNewAvg=prevNew>0?prevNewR/prevNew:0;
+    safeSet('na-total',fmtK(totalAll));
+    safeSet('na-abon',fmtK(totalAbon));
+    safeSet('na-tovar',fmtK(totalTovar));
+    const totalShiftsAll=ADMINS_NOV.reduce((s,a)=>s+a.shifts,0);
+    const avgShiftNov=totalAll/totalShiftsAll;
+    safeSet('na-avg',fmtK(Math.round(avgShiftNov)));
+    safeSet('na-leader',leader.name);
+    safeSet('na-leader-val',fmt(leader.total));
+    safeSet('na-new',totalNew+' шт.');
+    safeSet('na-new-rub',fmt(totalNewR));
+    const avgNewNov=totalNew>0?totalNewR/totalNew:0;
+    {
+      const addTrend=(id,cur,prev)=>{
+        const el=document.getElementById(id);
+        if(!el) return;
+        el.insertAdjacentHTML('beforeend',' '+trend(cur,prev)+' <span style="font-size:10px;color:var(--muted)">к октябрю</span>');
+      };
+      addTrend('na-total',totalAll,prevAll);
+      addTrend('na-abon',totalAbon,prevAbon);
+      addTrend('na-tovar',totalTovar,prevTovar);
+      addTrend('na-avg',avgShiftNov,prevAvgShift);
+      window._prevNewR_nov=prevNewR;
+      window._prevNewAvg_nov=prevNewAvg;
+    }
+
+    const tb=document.getElementById('nAdminTable');
+    const maxTotal=Math.max(...ADMINS_NOV.map(a=>a.total));
+    const maxTovar=Math.max(...ADMINS_NOV.map(a=>a.tovar),1);
+    const maxAbon=Math.max(...ADMINS_NOV.map(a=>a.abon));
+    const maxTovarVal=Math.max(...ADMINS_NOV.map(a=>a.tovar));
+    const maxNewQty=Math.max(...ADMINS_NOV.map(a=>a.newQty));
+    ADMINS_NOV.forEach((adm,rank)=>{
+      const tr=document.createElement('tr');
+      const bc=rank===0?'b1':rank===1?'b2':rank===2?'b3':'bn';
+      const pb=Math.round(adm.total/maxTotal*100);
+      const badges=(adm.abon===maxAbon?'<span title="Лидер по продажам услуг" style="font-size:13px;margin-left:4px">💰</span>':'')
+        +(adm.tovar===maxTovarVal?'<span title="Лидер по продажам товаров" style="font-size:13px;margin-left:4px">🛍️</span>':'')
+        +(maxNewQty>0&&adm.newQty===maxNewQty?'<span title="Лидер по кол-ву новичков" style="font-size:13px;margin-left:4px">👥</span>':'');
+      tr.innerHTML=`<td><span class="bx ${bc}">${rank+1}</span></td><td style="font-weight:500">${adm.name}${badges}</td>
+        <td class="r"><div class="mbar"><div class="mbar-bg"><div class="mbar-fill" style="width:${pb}%"></div></div><span class="mbar-val">${fmt(adm.abon)}</span></div></td>
+        <td class="r"><div class="mbar"><div class="mbar-bg"><div class="mbar-fill o" style="width:${Math.round(adm.tovar/maxTovar*100)}%"></div></div><span class="mbar-val">${fmt(adm.tovar)}</span></div></td>
+        <td class="r" style="font-weight:600">${fmt(adm.total)}</td>
+        <td class="r">${adm.shifts||'—'}</td>
+        <td class="r">${adm.perShift>0?fmt(adm.perShift):'—'}</td>
+        <td class="r">${adm.newQty||'—'}</td>
+        <td class="r">${adm.newRub>0?fmt(adm.newRub):'—'}</td>`;
+      tb.appendChild(tr);
+    });
+    const tf=document.createElement('tr');tf.className='tfoot';
+    const totalShifts=ADMINS_NOV.reduce((s,a)=>s+a.shifts,0);
+    tf.innerHTML=`<td colspan="2">ВСЕГО</td><td class="r">${fmt(totalAbon)}</td><td class="r">${fmt(totalTovar)}</td>
+      <td class="r">${fmt(totalAll)}</td><td class="r">${totalShifts}</td><td class="r">${fmt(Math.round(totalAll/totalShifts))}</td>
+      <td class="r">${totalNew}</td><td class="r">${fmt(totalNewR)}</td>`;
+    tb.appendChild(tf);
+
+    new Chart(document.getElementById('chartNovAdmins'),{type:'bar',
+      data:{labels:active.map(a=>a.name),datasets:[
+        {label:'Услуги',data:active.map(a=>a.abon),backgroundColor:G,borderRadius:4},
+        {label:'Товары',data:active.map(a=>a.tovar),backgroundColor:O,borderRadius:4},
+      ]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{datalabels:{display:false},legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
+        scales:{x:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}},y:{stacked:true,grid:{display:false}}}}
+    });
+  })();
+
+  // 4b. НОВИЧКАМ (First 20%) — не зависит от табеля смен, можно рендерить отдельно
+  (function(){
+    if(!NEWBIES_NOV.labels.length){return;}
+    const totalNew=NEWBIES_NOV.qty.reduce((s,v)=>s+v,0);
+    const totalNewR=NEWBIES_NOV.revenue.reduce((s,v)=>s+v,0);
+    safeSet('na-new',totalNew+' шт.');
+    safeSet('na-new-rub',fmt(totalNewR));
+    const avgNew=totalNew>0?Math.round(totalNewR/totalNew):0;
+    safeSet('na-new-avg',avgNew>0?fmtK(avgNew):'—');
+    {
+      const el1=document.getElementById('na-new-rub');
+      if(el1&&typeof window._prevNewR_nov!=='undefined') el1.insertAdjacentHTML('beforeend',' '+trend(totalNewR,window._prevNewR_nov)+' <span style="font-size:10px;color:var(--muted)">к октябрю</span>');
+      const el2=document.getElementById('na-new-avg');
+      if(el2&&typeof window._prevNewAvg_nov!=='undefined') el2.insertAdjacentHTML('beforeend',' '+trend(avgNew,window._prevNewAvg_nov)+' <span style="font-size:10px;color:var(--muted)">к октябрю</span>');
+    }
+    new Chart(document.getElementById('chartNovNewbies'),{type:'bar',
+      data:{labels:NEWBIES_NOV.labels,datasets:[{label:'Продажи новичкам',data:NEWBIES_NOV.revenue,backgroundColor:NEWBIES_NOV.colors,borderRadius:6,
+        datalabels:{anchor:'end',align:'end',font:{size:10,weight:'600'},color:G,formatter:v=>Math.round(v/1000)+'к'}}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{datalabels:{display:true},legend:{display:false},tooltip:{callbacks:{label:ctx=>'Продажи: '+fmt(ctx.raw)}}},
+        scales:{x:{grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}},y:{grid:{display:false}}}}
+    });
+    const legEl=document.getElementById('nNewbiesLegend');
+    NEWBIES_NOV.labels.forEach((lbl,i)=>{const avg=Math.round(NEWBIES_NOV.revenue[i]/NEWBIES_NOV.qty[i]);legEl.innerHTML+=`<div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:${NEWBIES_NOV.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${NEWBIES_NOV.qty[i]} чел., ${fmt(NEWBIES_NOV.revenue[i])}, ср.чек ${fmt(avg)}</span></div>`;});
+    legEl.innerHTML+=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--light);font-weight:600">Итого: ${totalNew} новичков · ${fmt(totalNewR)} · ср.чек ${fmt(avgNew)}</div>`;
+  })();
+}
+
+
+function renderDec(){
+  const W=WEEKS_DEC, C=CATS_DEC, T=TRIAL_DEC;
+  const safeSet=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  renderCatsTable('dec');
+
+  // 1. ПРОДАЖИ
+  (function(){
+    if(!W.labels.length){const pe=document.getElementById('ds-plan');if(pe){pe.textContent=fmtK(4000000);const ps=pe.parentElement.querySelector('.card-sub');if(ps)ps.textContent='план на декабрь';}return;}
+    const totalAll=MONTHLY.oct.total, abonAll=MONTHLY.oct.abon, tovarAll=MONTHLY.oct.tovar;
+    const avgWeek=Math.round(totalAll/W.labels.length);
+    const bestIdx=W.total.indexOf(Math.max(...W.total));
+    safeSet('ds-total',fmtK(totalAll));
+    safeSet('ds-abon', fmtK(abonAll));
+    safeSet('ds-tovar',fmtK(tovarAll));
+    safeSet('os-avg',  fmtK(avgWeek));
+    safeSet('os-best', W.labels[bestIdx]);
+    safeSet('os-best-val', fmt(W.total[bestIdx]));
+
+    const planEl=document.getElementById('ds-plan');
+    const planSubEl=planEl.parentElement.querySelector('.card-sub');
+    const monthPlan=4000000;
+    planEl.textContent=fmtK(monthPlan);
+    {const p=Math.round(totalAll/monthPlan*100);
+     const c=p>=100?G:p>=85?O:'#c0522a';
+     planSubEl.innerHTML=`<span style="color:${c};font-weight:600">${p}% плана за месяц</span>`;}
+
+    const tb=document.getElementById('dWeekTable');
+    const fmHasWeekly = typeof FITMOST_DEC_WEEKLY!=='undefined';
+    const fmWeekly = fmHasWeekly ? FITMOST_DEC_WEEKLY : W.labels.map(()=>0);
+    let cumul=0,cumulPlanSum=0;
+    W.labels.forEach((lbl,i)=>{
+      const tr=document.createElement('tr');
+      const fmWk=fmWeekly[i]||0;
+      const rowTotal=W.total[i]+fmWk;
+      const trendStr=i>0?trend(W.total[i]+fmWeekly[i],W.total[i-1]+fmWeekly[i-1]):'';
+      const wPlan=W.plan[i];
+      const planPct=wPlan>0?Math.round(rowTotal/wPlan*100):null;
+      if(wPlan>0){cumul+=rowTotal;cumulPlanSum+=wPlan;}
+      const cumulPct=cumulPlanSum>0?Math.round(cumul/cumulPlanSum*100):null;
+      tr.innerHTML=`<td>${lbl}</td>
+        <td class="r">${fmt(W.abon[i])}</td>
+        <td class="r">${fmt(W.tovar[i])}</td>
+        <td class="r" style="color:var(--muted)">${fmHasWeekly?fmt(fmWk):'—'}</td>
+        <td class="r">${fmt(rowTotal)} ${trendStr}</td>
+        <td class="r">${planPct!==null?planPill(planPct):'—'}</td>
+        <td class="r">${cumulPct!==null?planPill(cumulPct):'—'}</td>
+        <td class="r">${fmtN(W.visits[i])}</td>`;
+      tb.appendChild(tr);
+    });
+    const tf=document.createElement('tr');tf.className='tfoot';
+    const visTotal=W.visits.reduce((s,v)=>s+v,0);
+    const abonSum1C=W.abon.reduce((s,v)=>s+v,0);
+    const fmSum=fmHasWeekly?fmWeekly.reduce((s,v)=>s+v,0):(typeof FITMOST_DEC!=='undefined'?FITMOST_DEC:0);
+    tf.innerHTML=`<td>Итого</td><td class="r">${fmt(abonSum1C)}</td><td class="r">${fmt(tovarAll)}</td>
+      <td class="r">${fmt(fmSum)}</td><td class="r">${fmt(totalAll)}</td><td class="r">—</td><td class="r">—</td><td class="r">${fmtN(visTotal)}</td>`;
+    tb.appendChild(tf);
+
+
+    new Chart(document.getElementById('chartDecWeekly'),{type:'bar',
+      data:{labels:W.labels,datasets:[
+        {label:'Абонементы',data:W.abon,backgroundColor:W.labels.map(()=>G),
+          borderRadius:{topLeft:0,topRight:0,bottomLeft:5,bottomRight:5},order:2,stack:'s',
+          datalabels:{display:ctx=>W.abon[ctx.dataIndex]>0,anchor:'center',align:'center',font:{size:10,weight:'600'},color:'white',formatter:v=>Math.round(v/1000)+'к'}},
+        {label:'Товары',data:W.tovar,backgroundColor:W.labels.map(()=>O),
+          borderRadius:{topLeft:5,topRight:5,bottomLeft:0,bottomRight:0},order:2,stack:'s',
+          datalabels:{display:ctx=>W.tovar[ctx.dataIndex]>50000,anchor:'center',align:'center',font:{size:9,weight:'600'},color:'white',formatter:v=>Math.round(v/1000)+'к'}},
+        {label:'План',data:W.plan,type:'line',borderColor:PU,borderDash:[6,4],pointRadius:0,borderWidth:2,fill:false,order:1,
+          datalabels:{display:false}},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}}}}
+    });
+
+    const sets=[{label:'Выходные',key:'wknd',c:G},{label:'Вечер',key:'eve',c:O},{label:'Утро',key:'morn',c:B}];
+    const stackChart=(canvasId,labels,data,showSums)=>{
+      new Chart(document.getElementById(canvasId),{type:'bar',
+        data:{labels,datasets:sets.map(s=>({
+          label:s.label,data:toRub(data[s.key]),
+          backgroundColor:labels.map(()=>s.c),
+          borderRadius:3,stack:'s',
+          datalabels:{
+            display:ctx=>{const v=toRub(data[s.key])[ctx.dataIndex];return showSums?v>500:v>50000;},
+            anchor:'center',align:'center',
+            font:{size:showSums?9:10,weight:'600'},color:'white',
+            formatter:v=>showSums?Math.round(v/1000)+'к':Math.round(v/1000),
+          },
+        }))},
+        options:{responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
+          scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}}}}
+      });
+    };
+    stackChart('chartDecAbonCats',C.labels,C.abon,false);
+    stackChart('chartDecTovarCats',C.labels,C.tovar,true);
+  })();
+
+  // 2. ПОСЕЩЕНИЯ
+  (function(){
+    if(!W.labels.length){return;}
+    const totalVisits=W.visits.reduce((s,v)=>s+v,0);
+    const totalFirst=W.first.reduce((s,v)=>s+v,0);
+    safeSet('dv-total', fmtN(totalVisits));
+    safeSet('dv-first-month', fmtN(totalFirst));
+    {
+      const totalTrial=FIRST_SPLIT_DEC.trial.reduce((s,v)=>s+v,0);
+      const totalFriend=FIRST_SPLIT_DEC.friend.reduce((s,v)=>s+v,0);
+      const subEl=document.getElementById('dv-first-month').parentElement.querySelector('.card-sub');
+      subEl.innerHTML=`пробное ${totalTrial} · друг ${totalFriend}`;
+    }
+
+    new Chart(document.getElementById('chartDecVisits'),{type:'bar',
+      data:{labels:W.labels,datasets:[
+        {label:'Посещения',data:W.visits,backgroundColor:W.labels.map(()=>B),borderRadius:5,order:2,
+          datalabels:{anchor:'end',align:'end',offset:2,font:{size:11,weight:'600'},color:'#6ab4d8',formatter:v=>fmtN(v)}},
+        {label:'Первые посещения',data:W.first,type:'line',borderColor:G,pointBackgroundColor:G,
+          pointRadius:5,borderWidth:2,fill:false,order:1,
+          datalabels:{display:true,anchor:'end',align:'top',offset:4,font:{size:11,weight:'600'},color:G,formatter:v=>v+''}},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw+' чел.'}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(92,105,55,.07)'},suggestedMax:Math.max(...W.visits)*1.25}}}
+    });
+
+    const tb=document.getElementById('dVisitTable');
+    W.labels.forEach((lbl,i)=>{
+      const tr=document.createElement('tr');
+      let trendStr;
+      if(i>0){ trendStr=trend(W.visits[i],W.visits[i-1]); }
+      else if(typeof TRIAL_NOV!=='undefined' && TRIAL_NOV.visits.length){
+        // Первая неделя месяца — сравниваем с последней неделей предыдущего месяца
+        const prevLastVisits=TRIAL_NOV.visits[TRIAL_NOV.visits.length-1];
+        trendStr=trend(W.visits[i],prevLastVisits)+' <span style="font-size:10px;color:var(--muted)">к ноябрю</span>';
+      } else { trendStr=''; }
+      tr.innerHTML=`<td>${lbl}</td><td class="r">${fmtN(W.visits[i])}</td>
+        <td class="r">${trendStr}</td>
+        <td class="r">${fmtN(W.first[i])}</td><td class="r">${pct(W.first[i],W.visits[i])}</td>`;
+      tb.appendChild(tr);
+    });
+
+    new Chart(document.getElementById('chartDecFirstSplit'),{type:'bar',
+      data:{labels:FIRST_SPLIT_DEC.labels,datasets:[
+        {label:'Пробное занятие',data:FIRST_SPLIT_DEC.trial,backgroundColor:G,stack:'s',borderRadius:3,
+          datalabels:{anchor:'center',align:'center',font:{size:10,weight:'600'},color:'white',formatter:v=>v}},
+        {label:'Приведи друга',data:FIRST_SPLIT_DEC.friend,backgroundColor:O,stack:'s',borderRadius:3,
+          datalabels:{anchor:'center',align:'center',font:{size:9,weight:'600'},color:'white',formatter:v=>v>0?v:''}},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'}}}}
+    });
+  })();
+
+  // 3. КОНВЕРСИЯ / FIRST
+  (function(){
+    if(!T.labels.length){return;}
+    const convPct=T.conversion.map((c,i)=>(T.trial[i]>0&&T.conversion.some(x=>x>0))?Math.round(c/T.trial[i]*100):null);
+    new Chart(document.getElementById('chartDecTrialWeeks'),{type:'bar',
+      data:{labels:T.labels,datasets:[
+        {label:'Купили First',data:T.conversion,backgroundColor:'rgba(92,105,55,.82)',
+          stack:'visits',borderRadius:0,order:2,yAxisID:'y',
+          datalabels:{display:ctx=>T.conversion[ctx.dataIndex]>0,anchor:'center',align:'center',
+            font:{size:10,weight:'700'},color:'#fff',formatter:v=>v>0?v+' абон.':''}},
+        {label:'Остальные первые',data:T.trial.map((v,i)=>v-(T.conversion[i]||0)),
+          backgroundColor:'rgba(155,137,196,.55)',
+          stack:'visits',borderRadius:5,order:2,yAxisID:'y',
+          datalabels:{display:ctx=>true,anchor:'end',align:'end',offset:3,
+            font:{size:10,weight:'600'},color:PU,formatter:(v,ctx)=>T.trial[ctx.dataIndex]}},
+        {label:'% конверсии',data:convPct,type:'line',borderColor:O,pointBackgroundColor:O,
+          pointRadius:5,borderWidth:2,fill:false,order:1,yAxisID:'y1',datalabels:{display:false}}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:ctx=>ctx.datasetIndex===2?ctx.dataset.label+': '+(ctx.raw!=null?ctx.raw+'%':'—'):ctx.dataset.label+': '+ctx.raw}}},
+        scales:{x:{stacked:true,grid:{display:false}},
+          y:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},title:{display:true,text:'Пробных, шт.'}},
+          y1:{position:'right',grid:{display:false},title:{display:true,text:'Конверсия, %'},ticks:{callback:v=>v+'%'}}}}
+    });
+
+    new Chart(document.getElementById('chartDecTrialPie2'),{type:'doughnut',
+      data:{labels:TRIAL_PIE2_DEC.labels,datasets:[{data:TRIAL_PIE2_DEC.qty,backgroundColor:TRIAL_PIE2_DEC.colors,borderWidth:2}]},
+      plugins:[{id:'outlabel',afterDraw(chart){
+        const {ctx,chartArea,data}=chart;
+        const meta=chart.getDatasetMeta(0);
+        const cx=(chartArea.left+chartArea.right)/2, cy=(chartArea.top+chartArea.bottom)/2;
+        meta.data.forEach((arc,i)=>{
+          const mid=(arc.startAngle+arc.endAngle)/2;
+          const r=arc.outerRadius;
+          const col=data.datasets[0].backgroundColor[i];
+          const cos=Math.cos(mid), sin=Math.sin(mid);
+          ctx.save();
+          ctx.strokeStyle=col; ctx.lineWidth=1; ctx.globalAlpha=0.7;
+          ctx.beginPath();
+          ctx.moveTo(cx+(r+4)*cos, cy+(r+4)*sin);
+          ctx.lineTo(cx+(r+24)*cos, cy+(r+24)*sin);
+          ctx.stroke();
+          ctx.globalAlpha=1;
+          const lx=cx+(r+30)*cos, ly=cy+(r+30)*sin;
+          ctx.textAlign=cos>0.12?'left':cos<-0.12?'right':'center';
+          ctx.textBaseline='middle';
+          ctx.fillStyle=col;
+          ctx.font='bold 11px Montserrat,sans-serif';
+          ctx.fillText(data.labels[i], lx, ly-8);
+          ctx.font='10px Montserrat,sans-serif';
+          ctx.fillText(data.datasets[0].data[i]+' шт.', lx, ly+7);
+          ctx.restore();
+        });
+        const total=data.datasets[0].data.reduce((s,v)=>s+v,0);
+        ctx.save();
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.fillStyle='#3A3A2A';
+        ctx.font='bold 20px Montserrat,sans-serif';
+        ctx.fillText(total, cx, cy-9);
+        ctx.fillStyle='#aaa';
+        ctx.font='11px Montserrat,sans-serif';
+        ctx.fillText('абон.', cx, cy+10);
+        ctx.restore();
+      }}],
+      options:{responsive:true,maintainAspectRatio:false,
+        layout:{padding:{top:65,bottom:65,left:130,right:130}},
+        plugins:{datalabels:{display:false},legend:{display:false}}
+      }
+    });
+  })();
+
+  // 4. АДМИНИСТРАТОРЫ
+  (function(){
+    if(!ADMINS_DEC.length){return;}
+    const active=ADMINS_DEC.filter(a=>a.total>0);
+    const totalAbon=ADMINS_DEC.reduce((s,a)=>s+a.abon,0);
+    const totalTovar=ADMINS_DEC.reduce((s,a)=>s+a.tovar,0);
+    const totalAll=totalAbon+totalTovar;
+    const totalNew=ADMINS_DEC.reduce((s,a)=>s+a.newQty,0);
+    const totalNewR=ADMINS_DEC.reduce((s,a)=>s+a.newRub,0);
+    const leader=active[0];
+    // Сравнение с предыдущим месяцем (июль) — по правилу "текущий месяц vs предыдущий"
+    const prevAbon=ADMINS_NOV.reduce((s,a)=>s+a.abon,0);
+    const prevTovar=ADMINS_NOV.reduce((s,a)=>s+a.tovar,0);
+    const prevAll=prevAbon+prevTovar;
+    const prevShifts=ADMINS_NOV.reduce((s,a)=>s+a.shifts,0);
+    const prevAvgShift=prevShifts>0?prevAll/prevShifts:0;
+    const prevNew=ADMINS_NOV.reduce((s,a)=>s+a.newQty,0);
+    const prevNewR=ADMINS_NOV.reduce((s,a)=>s+a.newRub,0);
+    const prevNewAvg=prevNew>0?prevNewR/prevNew:0;
+    safeSet('da-total',fmtK(totalAll));
+    safeSet('da-abon',fmtK(totalAbon));
+    safeSet('da-tovar',fmtK(totalTovar));
+    const totalShiftsAll=ADMINS_DEC.reduce((s,a)=>s+a.shifts,0);
+    const avgShiftDec=totalAll/totalShiftsAll;
+    safeSet('da-avg',fmtK(Math.round(avgShiftDec)));
+    safeSet('da-leader',leader.name);
+    safeSet('da-leader-val',fmt(leader.total));
+    safeSet('da-new',totalNew+' шт.');
+    safeSet('da-new-rub',fmt(totalNewR));
+    const avgNewDec=totalNew>0?totalNewR/totalNew:0;
+    {
+      const addTrend=(id,cur,prev)=>{
+        const el=document.getElementById(id);
+        if(!el) return;
+        el.insertAdjacentHTML('beforeend',' '+trend(cur,prev)+' <span style="font-size:10px;color:var(--muted)">к ноябрю</span>');
+      };
+      addTrend('da-total',totalAll,prevAll);
+      addTrend('da-abon',totalAbon,prevAbon);
+      addTrend('da-tovar',totalTovar,prevTovar);
+      addTrend('da-avg',avgShiftDec,prevAvgShift);
+      window._prevNewR_dec=prevNewR;
+      window._prevNewAvg_dec=prevNewAvg;
+    }
+
+    const tb=document.getElementById('dAdminTable');
+    const maxTotal=Math.max(...ADMINS_DEC.map(a=>a.total));
+    const maxTovar=Math.max(...ADMINS_DEC.map(a=>a.tovar),1);
+    const maxAbon=Math.max(...ADMINS_DEC.map(a=>a.abon));
+    const maxTovarVal=Math.max(...ADMINS_DEC.map(a=>a.tovar));
+    const maxNewQty=Math.max(...ADMINS_DEC.map(a=>a.newQty));
+    ADMINS_DEC.forEach((adm,rank)=>{
+      const tr=document.createElement('tr');
+      const bc=rank===0?'b1':rank===1?'b2':rank===2?'b3':'bn';
+      const pb=Math.round(adm.total/maxTotal*100);
+      const badges=(adm.abon===maxAbon?'<span title="Лидер по продажам услуг" style="font-size:13px;margin-left:4px">💰</span>':'')
+        +(adm.tovar===maxTovarVal?'<span title="Лидер по продажам товаров" style="font-size:13px;margin-left:4px">🛍️</span>':'')
+        +(maxNewQty>0&&adm.newQty===maxNewQty?'<span title="Лидер по кол-ву новичков" style="font-size:13px;margin-left:4px">👥</span>':'');
+      tr.innerHTML=`<td><span class="bx ${bc}">${rank+1}</span></td><td style="font-weight:500">${adm.name}${badges}</td>
+        <td class="r"><div class="mbar"><div class="mbar-bg"><div class="mbar-fill" style="width:${pb}%"></div></div><span class="mbar-val">${fmt(adm.abon)}</span></div></td>
+        <td class="r"><div class="mbar"><div class="mbar-bg"><div class="mbar-fill o" style="width:${Math.round(adm.tovar/maxTovar*100)}%"></div></div><span class="mbar-val">${fmt(adm.tovar)}</span></div></td>
+        <td class="r" style="font-weight:600">${fmt(adm.total)}</td>
+        <td class="r">${adm.shifts||'—'}</td>
+        <td class="r">${adm.perShift>0?fmt(adm.perShift):'—'}</td>
+        <td class="r">${adm.newQty||'—'}</td>
+        <td class="r">${adm.newRub>0?fmt(adm.newRub):'—'}</td>`;
+      tb.appendChild(tr);
+    });
+    const tf=document.createElement('tr');tf.className='tfoot';
+    const totalShifts=ADMINS_DEC.reduce((s,a)=>s+a.shifts,0);
+    tf.innerHTML=`<td colspan="2">ВСЕГО</td><td class="r">${fmt(totalAbon)}</td><td class="r">${fmt(totalTovar)}</td>
+      <td class="r">${fmt(totalAll)}</td><td class="r">${totalShifts}</td><td class="r">${fmt(Math.round(totalAll/totalShifts))}</td>
+      <td class="r">${totalNew}</td><td class="r">${fmt(totalNewR)}</td>`;
+    tb.appendChild(tf);
+
+    new Chart(document.getElementById('chartDecAdmins'),{type:'bar',
+      data:{labels:active.map(a=>a.name),datasets:[
+        {label:'Услуги',data:active.map(a=>a.abon),backgroundColor:G,borderRadius:4},
+        {label:'Товары',data:active.map(a=>a.tovar),backgroundColor:O,borderRadius:4},
+      ]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{datalabels:{display:false},legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
+        scales:{x:{stacked:true,grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}},y:{stacked:true,grid:{display:false}}}}
+    });
+  })();
+
+  // 4b. НОВИЧКАМ (First 20%) — не зависит от табеля смен, можно рендерить отдельно
+  (function(){
+    if(!NEWBIES_DEC.labels.length){return;}
+    const totalNew=NEWBIES_DEC.qty.reduce((s,v)=>s+v,0);
+    const totalNewR=NEWBIES_DEC.revenue.reduce((s,v)=>s+v,0);
+    safeSet('da-new',totalNew+' шт.');
+    safeSet('da-new-rub',fmt(totalNewR));
+    const avgNew=totalNew>0?Math.round(totalNewR/totalNew):0;
+    safeSet('da-new-avg',avgNew>0?fmtK(avgNew):'—');
+    {
+      const el1=document.getElementById('da-new-rub');
+      if(el1&&typeof window._prevNewR_dec!=='undefined') el1.insertAdjacentHTML('beforeend',' '+trend(totalNewR,window._prevNewR_dec)+' <span style="font-size:10px;color:var(--muted)">к ноябрю</span>');
+      const el2=document.getElementById('da-new-avg');
+      if(el2&&typeof window._prevNewAvg_dec!=='undefined') el2.insertAdjacentHTML('beforeend',' '+trend(avgNew,window._prevNewAvg_dec)+' <span style="font-size:10px;color:var(--muted)">к ноябрю</span>');
+    }
+    new Chart(document.getElementById('chartDecNewbies'),{type:'bar',
+      data:{labels:NEWBIES_DEC.labels,datasets:[{label:'Продажи новичкам',data:NEWBIES_DEC.revenue,backgroundColor:NEWBIES_DEC.colors,borderRadius:6,
+        datalabels:{anchor:'end',align:'end',font:{size:10,weight:'600'},color:G,formatter:v=>Math.round(v/1000)+'к'}}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{datalabels:{display:true},legend:{display:false},tooltip:{callbacks:{label:ctx=>'Продажи: '+fmt(ctx.raw)}}},
+        scales:{x:{grid:{color:'rgba(92,105,55,.07)'},ticks:{callback:v=>v.toLocaleString('ru-RU')}},y:{grid:{display:false}}}}
+    });
+    const legEl=document.getElementById('dNewbiesLegend');
+    NEWBIES_DEC.labels.forEach((lbl,i)=>{const avg=Math.round(NEWBIES_DEC.revenue[i]/NEWBIES_DEC.qty[i]);legEl.innerHTML+=`<div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:${NEWBIES_DEC.colors[i]};flex-shrink:0"></div><span><b>${lbl}</b> — ${NEWBIES_DEC.qty[i]} чел., ${fmt(NEWBIES_DEC.revenue[i])}, ср.чек ${fmt(avg)}</span></div>`;});
+    legEl.innerHTML+=`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--light);font-weight:600">Итого: ${totalNew} новичков · ${fmt(totalNewR)} · ср.чек ${fmt(avgNew)}</div>`;
+  })();
+}
+
+
 // ── НАВИГАЦИЯ ─────────────────────────────────
 function showSection(name,btn){
   // trial объединена с visits
@@ -3751,7 +4851,7 @@ function showSection(name,btn){
   const pane=document.querySelector('.mpane.active');
   pane.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('active'));
-  const pfx=pane.id==='month-may'?'may':pane.id==='month-jun'?'jun':pane.id==='month-jul'?'jul':pane.id==='month-aug'?'aug':pane.id==='month-sep'?'sep':pane.id==='month-oct'?'oct':'apr';
+  const pfx=pane.id==='month-may'?'may':pane.id==='month-jun'?'jun':pane.id==='month-jul'?'jul':pane.id==='month-aug'?'aug':pane.id==='month-sep'?'sep':pane.id==='month-oct'?'oct':pane.id==='month-nov'?'nov':pane.id==='month-dec'?'dec':'apr';
   const target=pane.querySelector('#'+pfx+'-sec-'+name);
   if(target) target.classList.add('active');
   if(btn) btn.classList.add('active');
@@ -3771,6 +4871,8 @@ function showMonth(id,btn){
   if(!_rendered[id]&&id==='aug'){renderAug();_rendered[id]=true;}
   if(!_rendered[id]&&id==='sep'){renderSep();_rendered[id]=true;}
   if(!_rendered[id]&&id==='oct'){renderOct();_rendered[id]=true;}
+  if(!_rendered[id]&&id==='nov'){renderNov();_rendered[id]=true;}
+  if(!_rendered[id]&&id==='dec'){renderDec();_rendered[id]=true;}
 }
 
 // ── РЕНДЕРИНГ ─────────────────────────────────
